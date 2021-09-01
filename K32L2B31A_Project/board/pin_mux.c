@@ -96,6 +96,7 @@ pin_labels:
 void BOARD_InitBootPins(void)
 {
     BOARD_InitPins();
+    BOARD_InitLEDsPins();
     BOARD_InitDEBUG_UARTPins();
 }
 
@@ -453,7 +454,7 @@ void BOARD_InitBUTTONSPins(void)
 /*
  * TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
 BOARD_InitLEDsPins:
-- options: {prefix: BOARD_, coreID: core0, enableClock: 'true'}
+- options: {callFromInitBoot: 'true', prefix: BOARD_, coreID: core0, enableClock: 'true'}
 - pin_list:
   - {pin_num: '19', peripheral: GPIOE, signal: 'GPIO, 31', pin_signal: PTE31/TPM0_CH4, direction: OUTPUT, gpio_init_state: 'true', slew_rate: slow, pull_select: down,
     pull_enable: disable}

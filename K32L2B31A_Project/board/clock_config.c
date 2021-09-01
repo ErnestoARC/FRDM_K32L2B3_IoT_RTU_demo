@@ -70,8 +70,6 @@ outputs:
 settings:
 - {id: MCGMode, value: HIRC}
 - {id: MCG.CLKS.sel, value: MCG.HIRC}
-- {id: MCG_C2_OSC_MODE_CFG, value: ModeOscLowPower}
-- {id: MCG_C2_RANGE0_CFG, value: Very_high}
 - {id: MCG_MC_HIRCEN_CFG, value: Enabled}
 - {id: OSC0_CR_ERCLKEN_CFG, value: Enabled}
 - {id: OSC_CR_ERCLKEN_CFG, value: Enabled}
@@ -80,7 +78,6 @@ settings:
 - {id: SIM.FLEXIOSRCSEL.sel, value: MCG.MCGPCLK}
 - {id: SIM.LPUART0SRCSEL.sel, value: MCG.MCGPCLK}
 - {id: SIM.LPUART1SRCSEL.sel, value: MCG.MCGPCLK}
-- {id: SIM.RTCCLKOUTSEL.sel, value: OSC.OSCERCLK}
 - {id: SIM.TPMSRCSEL.sel, value: MCG.MCGPCLK}
 - {id: SIM.USBSRCSEL.sel, value: MCG.MCGPCLK}
 sources:
@@ -110,7 +107,7 @@ const osc_config_t oscConfig_BOARD_BootClockRUN =
     {
         .freq = 0U,                               /* Oscillator frequency: 0Hz */
         .capLoad = (OSC_CAP0P),                   /* Oscillator capacity load: 0pF */
-        .workMode = kOSC_ModeOscLowPower,         /* Oscillator low power */
+        .workMode = kOSC_ModeExt,                 /* Use external clock */
         .oscerConfig =
             {
                 .enableMode = kOSC_ErClkEnable,   /* Enable external reference clock, disable external reference clock in STOP mode */
