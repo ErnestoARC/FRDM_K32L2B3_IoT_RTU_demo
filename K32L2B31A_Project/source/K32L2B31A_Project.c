@@ -21,12 +21,11 @@
 #include <limits.h>
 #include <float.h>
 
-#include <iot_sdk_hal_gpio.h>
+#include <iot_sdk_peripherals_leds.h>
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
-#define LED_GREEN	KPTD5
-#define LED_RED		KPTE31
+
 
 /*******************************************************************************
  * Private Prototypes
@@ -62,8 +61,8 @@ int main(void) {
 
     while(1) {
     	waitTime();
-    	gpioPutToggle(LED_GREEN);
-    	gpioPutToggle(LED_RED);
+    	toggleLedVerde();
+    	toggleLedRojo();
     }
     return 0 ;
 }
