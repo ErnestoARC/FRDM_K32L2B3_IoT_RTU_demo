@@ -268,6 +268,7 @@
             <function name="BOARD_InitLEDsPins">
                <description>Configures pin routing and optionally pin electrical features.</description>
                <options>
+                  <callFromInitBoot>true</callFromInitBoot>
                   <prefix>BOARD_</prefix>
                   <coreID>core0</coreID>
                   <enableClock>true</enableClock>
@@ -539,8 +540,6 @@
                <clock_settings>
                   <setting id="MCGMode" value="HIRC" locked="false"/>
                   <setting id="MCG.CLKS.sel" value="MCG.HIRC" locked="false"/>
-                  <setting id="MCG_C2_OSC_MODE_CFG" value="ModeOscLowPower" locked="false"/>
-                  <setting id="MCG_C2_RANGE0_CFG" value="Very_high" locked="false"/>
                   <setting id="MCG_MC_HIRCEN_CFG" value="Enabled" locked="false"/>
                   <setting id="OSC0_CR_ERCLKEN_CFG" value="Enabled" locked="false"/>
                   <setting id="OSC_CR_ERCLKEN_CFG" value="Enabled" locked="false"/>
@@ -549,7 +548,6 @@
                   <setting id="SIM.FLEXIOSRCSEL.sel" value="MCG.MCGPCLK" locked="false"/>
                   <setting id="SIM.LPUART0SRCSEL.sel" value="MCG.MCGPCLK" locked="false"/>
                   <setting id="SIM.LPUART1SRCSEL.sel" value="MCG.MCGPCLK" locked="false"/>
-                  <setting id="SIM.RTCCLKOUTSEL.sel" value="OSC.OSCERCLK" locked="false"/>
                   <setting id="SIM.TPMSRCSEL.sel" value="MCG.MCGPCLK" locked="false"/>
                   <setting id="SIM.USBSRCSEL.sel" value="MCG.MCGPCLK" locked="false"/>
                </clock_settings>
