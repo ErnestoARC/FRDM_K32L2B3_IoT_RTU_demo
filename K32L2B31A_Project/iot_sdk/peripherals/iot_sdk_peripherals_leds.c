@@ -1,27 +1,16 @@
-/*! @file : K32L2B31A_Project.c
+/*! @file : sdk_mdlw_leds.c
  * @author  Ernesto Andres Rincon Cruz
- * @version 0.0.000
- * @date    23/08/2021
- * @brief   Funcion principal main
+ * @version 1.0.0
+ * @date    17/01/2021
+ * @brief   Driver para LEDS
  * @details
- *			v0.0.000	Proyecto base creado usando MCUXpresso
  *
- *
- */
+*/
 /*******************************************************************************
  * Includes
  ******************************************************************************/
-#include <stdio.h>
-#include "board.h"
-#include "peripherals.h"
-#include "pin_mux.h"
-#include "clock_config.h"
-#include "K32L2B31A.h"
-#include "fsl_debug_console.h"
-#include <limits.h>
-#include <float.h>
-
 #include <iot_sdk_peripherals_leds.h>
+
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
@@ -31,38 +20,23 @@
  * Private Prototypes
  ******************************************************************************/
 
+
 /*******************************************************************************
  * External vars
  ******************************************************************************/
+
 
 /*******************************************************************************
  * Local vars
  ******************************************************************************/
 
+
 /*******************************************************************************
  * Private Source Code
  ******************************************************************************/
-void waitTime(void) {
-	uint32_t tiempo = 0x1FFFFF;
-	do {
-		tiempo--;
-	} while (tiempo != 0x0000);
-}
 
-int main(void) {
-    /* Init board hardware. */
-    BOARD_InitBootPins();
-    BOARD_InitBootClocks();
-    BOARD_InitBootPeripherals();
-#ifndef BOARD_INIT_DEBUG_CONSOLE_PERIPHERAL
-    /* Init FSL debug console. */
-    BOARD_InitDebugConsole();
-#endif
 
-    while(1) {
-    	waitTime();
-    	toggleLedVerde();
-    	toggleLedRojo();
-    }
-    return 0 ;
-}
+/*******************************************************************************
+ * Public Source Code
+ ******************************************************************************/
+
