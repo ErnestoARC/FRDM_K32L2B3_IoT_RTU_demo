@@ -22,6 +22,8 @@
 #include <float.h>
 
 #include <iot_sdk_peripherals_leds.h>
+#include <iot_sdk_peripherals_light.h>
+
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
@@ -51,6 +53,7 @@ void waitTime(void) {
 
 
 int main(void) {
+	uint32_t adc_light_value;
     /* Init board hardware. */
     BOARD_InitBootPins();
     BOARD_InitBootClocks();
@@ -66,6 +69,8 @@ int main(void) {
     while(1) {
     	waitTime();
     	toggleLedRojo();
+    	adc_light_value=get_light_value();
+        PRINTF("ADC Value: %d\r\n", adc_light_value);
     }
     return 0 ;
 }
