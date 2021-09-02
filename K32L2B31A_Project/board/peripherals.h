@@ -11,6 +11,7 @@
  **********************************************************************************************************************/
 #include "fsl_common.h"
 #include "fsl_lptmr.h"
+#include "fsl_adc16.h"
 
 #if defined(__cplusplus)
 extern "C" {
@@ -35,11 +36,24 @@ extern "C" {
 #define LPTMR0_IRQN LPTMR0_IRQn
 /* LPTMR0 interrupt handler identifier. */
 #define LPTMR0_IRQHANDLER LPTMR0_IRQHandler
+/* Alias for ADC0 peripheral */
+#define ADC0_PERIPHERAL ADC0
+/* Definition of custom name for ADC0 configuration #0 (channel 3, control group 0) */
+#define ADC0_LIGHT_SENSOR 0U
+/* ADC0 interrupt vector ID (number). */
+#define ADC0_IRQN ADC0_IRQn
+/* ADC0 interrupt handler identifier. */
+#define ADC0_IRQHANDLER ADC0_IRQHandler
+/* Channel 0 (SE.3) conversion control group. */
+#define ADC0_CH0_CONTROL_GROUP 0
 
 /***********************************************************************************************************************
  * Global variables
  **********************************************************************************************************************/
 extern const lptmr_config_t LPTMR0_config;
+extern adc16_channel_config_t ADC0_channelsConfig[1];
+extern const adc16_config_t ADC0_config;
+extern const adc16_channel_mux_mode_t ADC0_muxMode;
 
 /***********************************************************************************************************************
  * Initialization functions
