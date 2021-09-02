@@ -49,6 +49,7 @@ void waitTime(void) {
 	} while (tiempo != 0x0000);
 }
 
+
 int main(void) {
     /* Init board hardware. */
     BOARD_InitBootPins();
@@ -59,9 +60,11 @@ int main(void) {
     BOARD_InitDebugConsole();
 #endif
 
+    /* Activa LPTMR0 para que iniciar contador y posterior IRQ cáda 1 segundo*/
+    LPTMR_StartTimer(LPTMR0);
+
     while(1) {
     	waitTime();
-    	toggleLedVerde();
     	toggleLedRojo();
     }
     return 0 ;
