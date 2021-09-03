@@ -12,9 +12,9 @@
  * Includes
  ******************************************************************************/
 #include <iot_sdk_hal_gpio.h>
-
+#include "peripherals.h"
 /*!
- * @addtogroup MIDDLEWARE
+ * @addtogroup PERIPHERALS
  * @{
  */
 /*!
