@@ -229,3 +229,50 @@ status_t gpioPutToggle(uint16_t pin_to_change) {
 
 	return (kStatus_Success);
 }
+/*--------------------------------------------*/
+status_t gpioReadValue(uint16_t pin_to_read, uint32_t *pin_value){
+	uint16_t gpio_port_name;
+	uint32_t gpio_pin_number;
+	uint32_t gpio_pin_value;
+	//Take 8MSB bits of pin_name for GPIOx PORT NAME
+	gpio_port_name = pin_to_read & 0xFF00;
+	gpio_port_name >>= 8;
+
+	//Take 8LSB bits of pin_name for GPIOx PIN NUMBER
+	gpio_pin_number = pin_to_read & 0x00FF;
+
+	//only is available numbers for range (0-31)
+	if (gpio_pin_number > 31)
+		return (kStatus_Fail);
+
+	//Call NXP_SDK_STACK to perform pin read
+	switch (gpio_port_name) {
+	case KGPIOA:
+		gpio_pin_value=GPIO_PinRead(GPIOA, gpio_pin_number);
+		break;
+
+	case KGPIOB:
+		gpio_pin_value=GPIO_PinRead(GPIOB, gpio_pin_number);
+		break;
+
+	case KGPIOC:
+		gpio_pin_value=GPIO_PinRead(GPIOC, gpio_pin_number);
+		break;
+
+	case KGPIOD:
+		gpio_pin_value=GPIO_PinRead(GPIOD, gpio_pin_number);
+		break;
+
+	case KGPIOE:
+		gpio_pin_value=GPIO_PinRead(GPIOE, gpio_pin_number);
+		break;
+
+	default:
+		return (kStatus_Fail);
+		break;
+	}
+
+	*pin_value=gpio_pin_value;
+
+	return (kStatus_Success);
+}

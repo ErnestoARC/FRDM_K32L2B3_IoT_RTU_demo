@@ -269,6 +269,20 @@ status_t gpioPutValue(uint16_t pin_to_change, uint8_t new_value);
  */
 status_t gpioPutToggle(uint16_t pin_to_change);
 
+/*!
+ * @brief Get value from specific pin
+ *
+ * @param pin_to_read	pin name code
+ * @param *pin_value
+ * @see	_gpio_pin_list_available
+ * @return	execution error code
+ * @code
+ * 		kStatus_Success
+ * 		kStatus_Fail
+ * @endcode
+ */
+status_t gpioReadValue(uint16_t pin_to_read, uint32_t *pin_value);
+
 /** @} */ // end of GPIO group
 /** @} */ // end of HAL group
 
