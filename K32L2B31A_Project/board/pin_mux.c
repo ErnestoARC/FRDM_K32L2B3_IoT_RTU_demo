@@ -96,6 +96,7 @@ pin_labels:
 void BOARD_InitBootPins(void)
 {
     BOARD_InitPins();
+    BOARD_InitBUTTONSPins();
     BOARD_InitLEDsPins();
     BOARD_InitDEBUG_UARTPins();
     BOARD_InitLIGHT_ADCPins();
@@ -387,12 +388,12 @@ void BOARD_InitLCDPins(void)
 /*
  * TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
 BOARD_InitBUTTONSPins:
-- options: {callFromInitBoot: 'false', prefix: BOARD_, coreID: core0, enableClock: 'true'}
+- options: {callFromInitBoot: 'true', prefix: BOARD_, coreID: core0, enableClock: 'true'}
 - pin_list:
-  - {pin_num: '26', peripheral: GPIOA, signal: 'GPIO, 4', pin_signal: PTA4/I2C1_SDA/TPM0_CH1/NMI_b, direction: INPUT, slew_rate: fast, pull_select: up, pull_enable: enable,
-    passive_filter: disable}
-  - {pin_num: '46', peripheral: GPIOC, signal: 'GPIO, 3', pin_signal: LCD_P23/PTC3/LLWU_P7/SPI1_SCK/LPUART1_RX/TPM0_CH2/CLKOUT, direction: INPUT, slew_rate: fast,
-    pull_select: up, pull_enable: enable}
+  - {pin_num: '26', peripheral: GPIOA, signal: 'GPIO, 4', pin_signal: PTA4/I2C1_SDA/TPM0_CH1/NMI_b, direction: INPUT, gpio_interrupt: kPORT_InterruptOrDMADisabled,
+    slew_rate: fast, pull_select: up, pull_enable: enable, passive_filter: disable}
+  - {pin_num: '46', peripheral: GPIOC, signal: 'GPIO, 3', pin_signal: LCD_P23/PTC3/LLWU_P7/SPI1_SCK/LPUART1_RX/TPM0_CH2/CLKOUT, direction: INPUT, gpio_interrupt: kPORT_InterruptOrDMADisabled,
+    slew_rate: fast, pull_select: up, pull_enable: enable}
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********
  */
 /* clang-format on */
@@ -437,6 +438,9 @@ void BOARD_InitBUTTONSPins(void)
     /* PORTA4 (pin 26) is configured as PTA4 */
     PORT_SetPinConfig(BOARD_SW1_PORT, BOARD_SW1_PIN, &SW1);
 
+    /* Interrupt configuration on PORTA4 (pin 26): Interrupt/DMA request is disabled */
+    PORT_SetPinInterruptConfig(BOARD_SW1_PORT, BOARD_SW1_PIN, kPORT_InterruptOrDMADisabled);
+
     const port_pin_config_t SW3 = {/* Internal pull-up resistor is enabled */
                                    kPORT_PullUp,
                                    /* Fast slew rate is configured */
@@ -449,6 +453,9 @@ void BOARD_InitBUTTONSPins(void)
                                    kPORT_MuxAsGpio};
     /* PORTC3 (pin 46) is configured as PTC3 */
     PORT_SetPinConfig(BOARD_SW3_PORT, BOARD_SW3_PIN, &SW3);
+
+    /* Interrupt configuration on PORTC3 (pin 46): Interrupt/DMA request is disabled */
+    PORT_SetPinInterruptConfig(BOARD_SW3_PORT, BOARD_SW3_PIN, kPORT_InterruptOrDMADisabled);
 }
 
 /* clang-format off */

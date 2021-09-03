@@ -23,11 +23,10 @@
 
 #include <iot_sdk_peripherals_leds.h>
 #include <iot_sdk_peripherals_light.h>
-
+#include "iot_sdk_peripherals_buttons.h"
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
-
 
 /*******************************************************************************
  * Private Prototypes
@@ -69,8 +68,11 @@ int main(void) {
     while(1) {
     	waitTime();
     	toggleLedRojo();
-    	adc_light_value=get_light_value();
-        PRINTF("ADC Value: %d\r\n", adc_light_value);
+    	adc_light_value=getLightValue();
+        printf("ADC Value: %d\r\n", adc_light_value);
+        printf("boton1:%d\r\n",leerBoton1());
+        printf("boton2:%d\r\n",leerBoton2());
+        printf("\r\n");
     }
     return 0 ;
 }

@@ -225,7 +225,7 @@
             <function name="BOARD_InitBUTTONSPins">
                <description>Configures pin routing and optionally pin electrical features.</description>
                <options>
-                  <callFromInitBoot>false</callFromInitBoot>
+                  <callFromInitBoot>true</callFromInitBoot>
                   <prefix>BOARD_</prefix>
                   <coreID>core0</coreID>
                   <enableClock>true</enableClock>
@@ -251,6 +251,7 @@
                   <pin peripheral="GPIOA" signal="GPIO, 4" pin_num="26" pin_signal="PTA4/I2C1_SDA/TPM0_CH1/NMI_b">
                      <pin_features>
                         <pin_feature name="direction" value="INPUT"/>
+                        <pin_feature name="gpio_interrupt" value="kPORT_InterruptOrDMADisabled"/>
                         <pin_feature name="slew_rate" value="fast"/>
                         <pin_feature name="pull_select" value="up"/>
                         <pin_feature name="pull_enable" value="enable"/>
@@ -260,6 +261,7 @@
                   <pin peripheral="GPIOC" signal="GPIO, 3" pin_num="46" pin_signal="LCD_P23/PTC3/LLWU_P7/SPI1_SCK/LPUART1_RX/TPM0_CH2/CLKOUT">
                      <pin_features>
                         <pin_feature name="direction" value="INPUT"/>
+                        <pin_feature name="gpio_interrupt" value="kPORT_InterruptOrDMADisabled"/>
                         <pin_feature name="slew_rate" value="fast"/>
                         <pin_feature name="pull_select" value="up"/>
                         <pin_feature name="pull_enable" value="enable"/>
