@@ -38,7 +38,7 @@ extern adc16_channel_config_t ADC0_channelsConfig[1];
 /*******************************************************************************
  * Public Source Code
  ******************************************************************************/
-uint32_t get_light_value(void) {
+uint32_t getLightValue(void) {
 	uint32_t adc_light_value;
 	ADC16_SetChannelConfig(ADC0_PERIPHERAL, ADC0_CH0_CONTROL_GROUP,	&ADC0_channelsConfig[0]);
 	while (0U== (kADC16_ChannelConversionDoneFlag& ADC16_GetChannelStatusFlags(ADC0_PERIPHERAL,ADC0_CH0_CONTROL_GROUP))) {
