@@ -36,7 +36,7 @@
 /*******************************************************************************
  * Public Prototypes
  ******************************************************************************/
-uint32_t getLightValue(void);
+uint32_t getLightADC(void);
 
 /** @} */ // end of LIGHT group
 /** @} */ // end of PERIPHERALS group
