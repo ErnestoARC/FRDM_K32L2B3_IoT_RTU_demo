@@ -146,7 +146,7 @@ instance:
       - enableAsynchronousClock: 'true'
       - clockDivider: 'kADC16_ClockDivider8'
       - resolution: 'kADC16_ResolutionSE12Bit'
-      - longSampleMode: 'kADC16_LongSampleDisabled'
+      - longSampleMode: 'kADC16_LongSampleCycle24'
       - hardwareAverageMode: 'kADC16_HardwareAverageDisabled'
       - enableHighSpeed: 'false'
       - enableLowPower: 'false'
@@ -166,17 +166,41 @@ instance:
       - enable_custom_name: 'false'
     - adc16_channels_config:
       - 0:
-        - channelName: 'LIGHT_SENSOR'
+        - channelName: 'LIGHT'
         - enableDifferentialConversion: 'false'
         - channelNumber: 'SE.3'
         - enableInterruptOnConversionCompleted: 'false'
         - channelGroup: '0'
-        - initializeChannel: 'true'
+        - initializeChannel: 'false'
+      - 1:
+        - channelName: 'BANDGAP'
+        - enableDifferentialConversion: 'false'
+        - channelNumber: 'SE.27'
+        - enableInterruptOnConversionCompleted: 'false'
+        - channelGroup: '0'
+        - initializeChannel: 'false'
+      - 2:
+        - channelName: 'TEMPERATURE'
+        - enableDifferentialConversion: 'false'
+        - channelNumber: 'SE.26'
+        - enableInterruptOnConversionCompleted: 'false'
+        - channelGroup: '0'
+        - initializeChannel: 'false'
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
 /* clang-format on */
-adc16_channel_config_t ADC0_channelsConfig[1] = {
+adc16_channel_config_t ADC0_channelsConfig[3] = {
   {
     .channelNumber = 3U,
+    .enableDifferentialConversion = false,
+    .enableInterruptOnConversionCompleted = false,
+  },
+  {
+    .channelNumber = 27U,
+    .enableDifferentialConversion = false,
+    .enableInterruptOnConversionCompleted = false,
+  },
+  {
+    .channelNumber = 26U,
     .enableDifferentialConversion = false,
     .enableInterruptOnConversionCompleted = false,
   }
@@ -187,7 +211,7 @@ const adc16_config_t ADC0_config = {
   .enableAsynchronousClock = true,
   .clockDivider = kADC16_ClockDivider8,
   .resolution = kADC16_ResolutionSE12Bit,
-  .longSampleMode = kADC16_LongSampleDisabled,
+  .longSampleMode = kADC16_LongSampleCycle24,
   .hardwareAverageMode = kADC16_HardwareAverageDisabled,
   .enableHighSpeed = false,
   .enableLowPower = false,
@@ -204,8 +228,6 @@ static void ADC0_init(void) {
   ADC16_SetChannelMuxMode(ADC0_PERIPHERAL, ADC0_muxMode);
   /* Perform auto calibration */
   ADC16_DoAutoCalibration(ADC0_PERIPHERAL);
-  /* Initialize channel */
-  ADC16_SetChannelConfig(ADC0_PERIPHERAL, ADC0_CH0_CONTROL_GROUP, &ADC0_channelsConfig[0]);
 }
 
 /***********************************************************************************************************************
