@@ -24,6 +24,9 @@
 #include <iot_sdk_peripherals_leds.h>
 #include <iot_sdk_peripherals_light.h>
 #include "iot_sdk_peripherals_buttons.h"
+#include "iot_sdk_peripheral_temperature.h"
+
+#include "iot_sdk_ irq_lptimer0.h"
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
@@ -43,16 +46,10 @@
 /*******************************************************************************
  * Private Source Code
  ******************************************************************************/
-void waitTime(void) {
-	uint32_t tiempo = 0x1FFFFF;
-	do {
-		tiempo--;
-	} while (tiempo != 0x0000);
-}
-
-
 int main(void) {
 	uint32_t adc_light_value;
+	float temperature_value;
+
     /* Init board hardware. */
     BOARD_InitBootPins();
     BOARD_InitBootClocks();
@@ -62,17 +59,22 @@ int main(void) {
     BOARD_InitDebugConsole();
 #endif
 
-    /* Activa LPTMR0 para que iniciar contador y posterior IRQ cáda 1 segundo*/
+    /* Activa LPTMR0 para que iniciar contador y posterior IRQ cada 1 segundo*/
     LPTMR_StartTimer(LPTMR0);
 
     while(1) {
-    	waitTime();
-    	toggleLedRojo();
-    	adc_light_value=getLightValue();
-        printf("ADC Value: %d\r\n", adc_light_value);
-        printf("boton1:%d\r\n",leerBoton1());
-        printf("boton2:%d\r\n",leerBoton2());
-        printf("\r\n");
+    	if(lptmr0_ticks!=0){
+    		lptmr0_ticks=0;
+        	toggleLedRojo();
+        	toggleLedVerde();
+        	adc_light_value=getLightADC();
+        	temperature_value=getTemperatureValue();
+        	printf("ADC Light: %d\r\n", adc_light_value);
+        	printf("Temperature: %f\r\n", temperature_value);
+            printf("boton1:%d\r\n",leerBoton1());
+            printf("boton2:%d\r\n",leerBoton2());
+            printf("\r\n");
+    	}
     }
     return 0 ;
 }
