@@ -27,6 +27,7 @@
 #include "iot_sdk_peripheral_temperature.h"
 
 #include "iot_sdk_ irq_lptimer0.h"
+#include "iot_sdk_irq_lpuart0.h"
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
@@ -49,6 +50,8 @@
 int main(void) {
 	uint32_t adc_light_value;
 	float temperature_value;
+	status_t status;
+	uint8_t nuevo_byte_uart;
 
     /* Init board hardware. */
     BOARD_InitBootPins();
@@ -67,13 +70,24 @@ int main(void) {
     		lptmr0_ticks=0;
         	toggleLedRojo();
         	toggleLedVerde();
-        	adc_light_value=getLightADC();
-        	temperature_value=getTemperatureValue();
-        	printf("ADC Light: %d\r\n", adc_light_value);
-        	printf("Temperature: %f\r\n", temperature_value);
-            printf("boton1:%d\r\n",leerBoton1());
-            printf("boton2:%d\r\n",leerBoton2());
-            printf("\r\n");
+
+    		//Busca si llegaron nuevos datos desde modem mientras esperaba
+    		if (lpUart0CuantosDatosHayEnBuffer() > 0) {
+    			status = lpUart0LeerByteDesdeBuffer(&nuevo_byte_uart);
+    			if (status == kStatus_Success) {
+    				adc_light_value=getLightADC();
+    				temperature_value=getTemperatureValue();
+
+    				printf("Nuevo byte:%c - 0x%2x\r\n",nuevo_byte_uart,nuevo_byte_uart);
+    	        	printf("ADC Light: %d\r\n", adc_light_value);
+    	        	printf("Temperature: %f\r\n", temperature_value);
+    	            printf("boton1:%d\r\n",leerBoton1());
+    	            printf("boton2:%d\r\n",leerBoton2());
+    	            printf("\r\n");
+    			}
+    		}
+
+
     	}
     }
     return 0 ;
