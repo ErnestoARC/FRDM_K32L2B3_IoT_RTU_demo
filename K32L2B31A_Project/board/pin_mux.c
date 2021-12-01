@@ -100,6 +100,7 @@ void BOARD_InitBootPins(void)
     BOARD_InitLEDsPins();
     BOARD_InitDEBUG_UARTPins();
     BOARD_InitLIGHT_ADCPins();
+    BOARD_Init_I2C1Pins();
 }
 
 /* clang-format off */
@@ -814,6 +815,36 @@ void BOARD_InitLIGHT_ADCPins(void)
 
     /* PORTE22 (pin 11) is configured as ADC0_SE3 */
     PORT_SetPinMux(BOARD_INITLIGHT_ADCPINS_LIGHT_SENSOR_PORT, BOARD_INITLIGHT_ADCPINS_LIGHT_SENSOR_PIN, kPORT_PinDisabledOrAnalog);
+}
+
+/* clang-format off */
+/*
+ * TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
+BOARD_Init_I2C1Pins:
+- options: {callFromInitBoot: 'true', coreID: core0, enableClock: 'true'}
+- pin_list:
+  - {pin_num: '44', peripheral: I2C1, signal: SCL, pin_signal: LCD_P21/ADC0_SE15/PTC1/LLWU_P6/RTC_CLKIN/I2C1_SCL/TPM0_CH0}
+  - {pin_num: '45', peripheral: I2C1, signal: SDA, pin_signal: LCD_P22/ADC0_SE11/PTC2/I2C1_SDA/TPM0_CH1}
+ * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********
+ */
+/* clang-format on */
+
+/* FUNCTION ************************************************************************************************************
+ *
+ * Function Name : BOARD_Init_I2C1Pins
+ * Description   : Configures pin routing and optionally pin electrical features.
+ *
+ * END ****************************************************************************************************************/
+void BOARD_Init_I2C1Pins(void)
+{
+    /* Port C Clock Gate Control: Clock enabled */
+    CLOCK_EnableClock(kCLOCK_PortC);
+
+    /* PORTC1 (pin 44) is configured as I2C1_SCL */
+    PORT_SetPinMux(PORTC, 1U, kPORT_MuxAlt2);
+
+    /* PORTC2 (pin 45) is configured as I2C1_SDA */
+    PORT_SetPinMux(PORTC, 2U, kPORT_MuxAlt2);
 }
 /***********************************************************************************************************************
  * EOF
