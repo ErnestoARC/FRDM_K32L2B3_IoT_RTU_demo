@@ -367,6 +367,12 @@ void BOARD_InitOSCPins(void);
  */
 void BOARD_InitLIGHT_ADCPins(void);
 
+/*!
+ * @brief Configures pin routing and optionally pin electrical features.
+ *
+ */
+void BOARD_Init_I2C1Pins(void);
+
 #if defined(__cplusplus)
 }
 #endif
