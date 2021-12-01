@@ -35,6 +35,7 @@ board: FRDM-K32L2B
  ******************************************************************************/
 #define OSC_CAP0P                                         0U  /*!< Oscillator 0pF capacitor load */
 #define OSC_ER_CLK_DISABLE                                0U  /*!< Disable external reference clock */
+#define SIM_LPUART_CLK_SEL_IRC48M_CLK                     1U  /*!< LPUART clock select: IRC48M clock */
 #define SIM_OSC32KSEL_OSC32KCLK_CLK                       0U  /*!< OSC32KSEL select: OSC32KCLK clock */
 
 /*******************************************************************************
@@ -64,11 +65,13 @@ outputs:
 - {id: Core_clock.outFreq, value: 48 MHz}
 - {id: Flash_clock.outFreq, value: 24 MHz}
 - {id: LPO_clock.outFreq, value: 1 kHz}
+- {id: LPUART0CLK.outFreq, value: 48 MHz}
 - {id: MCGIRCLK.outFreq, value: 8 MHz}
 - {id: MCGPCLK.outFreq, value: 48 MHz}
 - {id: System_clock.outFreq, value: 48 MHz}
 settings:
 - {id: MCGMode, value: HIRC}
+- {id: LPUART0ClkConfig, value: 'yes'}
 - {id: MCG.CLKS.sel, value: MCG.HIRC}
 - {id: MCG_MC_HIRCEN_CFG, value: Enabled}
 - {id: OSC0_CR_ERCLKEN_CFG, value: Enabled}
@@ -127,6 +130,8 @@ void BOARD_BootClockRUN(void)
     CLOCK_SetSimConfig(&simConfig_BOARD_BootClockRUN);
     /* Set SystemCoreClock variable. */
     SystemCoreClock = BOARD_BOOTCLOCKRUN_CORE_CLOCK;
+    /* Set LPUART0 clock source. */
+    CLOCK_SetLpuart0Clock(SIM_LPUART_CLK_SEL_IRC48M_CLK);
 }
 
 /*******************************************************************************
