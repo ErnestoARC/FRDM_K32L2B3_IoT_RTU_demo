@@ -35,7 +35,7 @@
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
-#define HABILITAR_SENSOR_BME280		1
+#define HABILITAR_SENSOR_BME280		0
 #define HABILITAR_SENSOR_SHT3X		1
 
 #define HABILITAR_TLPTMR0			1
@@ -57,26 +57,34 @@
  * Private Source Code
  ******************************************************************************/
 int main(void) {
+	/*Crea variables locales -------------------------------------*/
 	uint32_t adc_light_value;
 	float temperature_value;
 	status_t status;
 	uint8_t nuevo_byte_uart;
-
+#if HABILITAR_SENSOR_BME280
 	bme280_data_t bme280_datos;
 	uint8_t bme280_detectado=0;
 	uint8_t bme280_base_de_tiempo=0;
+#endif
 
+#if HABILITAR_SENSOR_SHT3X
 	sht3x_data_t sht3x_datos;
 	uint8_t sht3x_detectado=0;
 	uint8_t sht3x_base_de_tiempo=0;
+#endif
+	/* Finaliza la creación de variables locales-----------------*/
 
 
-    /* Init board hardware. */
+    /* Inicialización del microcontrolador ----------------------*/
     BOARD_InitBootPins();
     BOARD_InitBootClocks();
     BOARD_InitBootPeripherals();
+    /* Finaliza inicialización ----------------------------------*/
+
+
 #ifndef BOARD_INIT_DEBUG_CONSOLE_PERIPHERAL
-    /* Init FSL debug console. */
+    /* Inicializa el puerto serial para enviar mensajes al MODEM/DOCKLIGHT*/
     BOARD_InitDebugConsole();
 #endif
 
@@ -127,7 +135,7 @@ int main(void) {
     		if (lpUart0CuantosDatosHayEnBuffer() > 0) {
     			status = lpUart0LeerByteDesdeBuffer(&nuevo_byte_uart);
     			if (status == kStatus_Success) {
-    				/* Imprime byte recibido por opuerto LPUART0*/
+    				/* Imprime byte recibido por puerto LPUART0*/
     				printf("Nuevo byte:%c - 0x%2x\r\n",nuevo_byte_uart,nuevo_byte_uart);
 
     				/* Toma lectura del sensor de luz*/
