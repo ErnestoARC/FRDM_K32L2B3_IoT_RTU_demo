@@ -46,6 +46,8 @@ extern "C" {
 #define ADC0_BANDGAP 1U
 /* Definition of custom name for ADC0 configuration #2 (channel 26, control group 0) */
 #define ADC0_TEMPERATURE 2U
+/* Definition of custom name for ADC0 configuration #3 (channel 8, control group 0) */
+#define ADC0_SENSOR_EXTERNO 3U
 /* ADC0 interrupt vector ID (number). */
 #define ADC0_IRQN ADC0_IRQn
 /* ADC0 interrupt handler identifier. */
@@ -56,6 +58,8 @@ extern "C" {
 #define ADC0_CH1_CONTROL_GROUP 0
 /* Channel 2 (SE.26) conversion control group. */
 #define ADC0_CH2_CONTROL_GROUP 0
+/* Channel 3 (SE.8) conversion control group. */
+#define ADC0_CH3_CONTROL_GROUP 0
 /* Definition of peripheral ID */
 #define LPUART0_PERIPHERAL LPUART0
 /* Definition of the clock source frequency */
@@ -69,7 +73,7 @@ extern "C" {
  * Global variables
  **********************************************************************************************************************/
 extern const lptmr_config_t LPTMR0_config;
-extern adc16_channel_config_t ADC0_channelsConfig[3];
+extern adc16_channel_config_t ADC0_channelsConfig[4];
 extern const adc16_config_t ADC0_config;
 extern const adc16_channel_mux_mode_t ADC0_muxMode;
 extern const lpuart_config_t LPUART0_config;
