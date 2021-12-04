@@ -187,9 +187,16 @@ instance:
         - enableInterruptOnConversionCompleted: 'false'
         - channelGroup: '0'
         - initializeChannel: 'false'
+      - 3:
+        - channelName: 'SENSOR_EXTERNO'
+        - enableDifferentialConversion: 'false'
+        - channelNumber: 'SE.8'
+        - enableInterruptOnConversionCompleted: 'false'
+        - channelGroup: '0'
+        - initializeChannel: 'true'
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
 /* clang-format on */
-adc16_channel_config_t ADC0_channelsConfig[3] = {
+adc16_channel_config_t ADC0_channelsConfig[4] = {
   {
     .channelNumber = 3U,
     .enableDifferentialConversion = false,
@@ -202,6 +209,11 @@ adc16_channel_config_t ADC0_channelsConfig[3] = {
   },
   {
     .channelNumber = 26U,
+    .enableDifferentialConversion = false,
+    .enableInterruptOnConversionCompleted = false,
+  },
+  {
+    .channelNumber = 8U,
     .enableDifferentialConversion = false,
     .enableInterruptOnConversionCompleted = false,
   }
@@ -229,6 +241,8 @@ static void ADC0_init(void) {
   ADC16_SetChannelMuxMode(ADC0_PERIPHERAL, ADC0_muxMode);
   /* Perform auto calibration */
   ADC16_DoAutoCalibration(ADC0_PERIPHERAL);
+  /* Initialize channel */
+  ADC16_SetChannelConfig(ADC0_PERIPHERAL, ADC0_CH3_CONTROL_GROUP, &ADC0_channelsConfig[3]);
 }
 
 /***********************************************************************************************************************
