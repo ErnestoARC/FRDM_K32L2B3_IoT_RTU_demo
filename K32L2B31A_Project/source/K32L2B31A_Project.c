@@ -29,6 +29,7 @@
 #include "iot_sdk_peripheral_temperature.h"
 #include "iot_sdk_peripherals_bme280.h"
 #include "iot_sdk_peripherals_sht3x.h"
+#include "iot_sdk_peripherals_sensor_ana.h"
 
 #include "iot_sdk_ irq_lptimer0.h"
 #include "iot_sdk_irq_lpuart0.h"
@@ -36,7 +37,7 @@
  * Definitions
  ******************************************************************************/
 #define HABILITAR_SENSOR_BME280		0
-#define HABILITAR_SENSOR_SHT3X		1
+#define HABILITAR_SENSOR_SHT3X		0
 
 #define HABILITAR_TLPTMR0			1
 #define HABILITAR_I2C1				1
@@ -58,10 +59,14 @@
  ******************************************************************************/
 int main(void) {
 	/*Crea variables locales -------------------------------------*/
+	uint32_t adc_sensor_value;
 	uint32_t adc_light_value;
 	float temperature_value;
 	status_t status;
 	uint8_t nuevo_byte_uart;
+
+
+
 #if HABILITAR_SENSOR_BME280
 	bme280_data_t bme280_datos;
 	uint8_t bme280_detectado=0;
@@ -145,6 +150,11 @@ int main(void) {
     				/* Toma lectura de temperatura*/
     				temperature_value=getTemperatureValue();
     				printf("Temperature: %f\r\n", temperature_value);
+
+    				/* Toma lectura de sensor análogico externo*/
+    				adc_sensor_value=getSensorADC();
+    				printf("ADC sensor: %d\r\n", adc_sensor_value);
+
 
 #if HABILITAR_SENSOR_BME280
 					if(bme280_detectado==1){
