@@ -31,120 +31,6 @@ void BOARD_InitBootPins(void);
  */
 void BOARD_InitPins(void);
 
-/*! @name PORTB18 (number 41), J1[1]/LCD_P14
-  @{ */
-
-/* Symbols to be used with PORT driver */
-#define BOARD_LCD_P14_PORT PORTB                /*!<@brief PORT peripheral base pointer */
-#define BOARD_LCD_P14_PIN 18U                   /*!<@brief PORT pin number */
-#define BOARD_LCD_P14_PIN_MASK (1U << 18U)      /*!<@brief PORT pin mask */
-                                                /* @} */
-
-/*! @name PORTB19 (number 42), J1[3]/LCD_P15
-  @{ */
-
-/* Symbols to be used with PORT driver */
-#define BOARD_LCD_P15_PORT PORTB                /*!<@brief PORT peripheral base pointer */
-#define BOARD_LCD_P15_PIN 19U                   /*!<@brief PORT pin number */
-#define BOARD_LCD_P15_PIN_MASK (1U << 19U)      /*!<@brief PORT pin mask */
-                                                /* @} */
-
-/*! @name PORTC0 (number 43), J1[5]/LCD_P20/USB_SOF_OUT
-  @{ */
-
-/* Symbols to be used with PORT driver */
-#define BOARD_LCD_P20_PORT PORTC               /*!<@brief PORT peripheral base pointer */
-#define BOARD_LCD_P20_PIN 0U                   /*!<@brief PORT pin number */
-#define BOARD_LCD_P20_PIN_MASK (1U << 0U)      /*!<@brief PORT pin mask */
-                                               /* @} */
-
-/*! @name PORTC4 (number 53), J1[7]/LCD_P24
-  @{ */
-
-/* Symbols to be used with PORT driver */
-#define BOARD_LCD_P24_PORT PORTC               /*!<@brief PORT peripheral base pointer */
-#define BOARD_LCD_P24_PIN 4U                   /*!<@brief PORT pin number */
-#define BOARD_LCD_P24_PIN_MASK (1U << 4U)      /*!<@brief PORT pin mask */
-                                               /* @} */
-
-/*! @name PORTC6 (number 55), J1[9]/LCD_P26
-  @{ */
-
-/* Symbols to be used with PORT driver */
-#define BOARD_LCD_P26_PORT PORTC               /*!<@brief PORT peripheral base pointer */
-#define BOARD_LCD_P26_PIN 6U                   /*!<@brief PORT pin number */
-#define BOARD_LCD_P26_PIN_MASK (1U << 6U)      /*!<@brief PORT pin mask */
-                                               /* @} */
-
-/*! @name PORTC7 (number 56), J1[11]/USB_SOF_OUT/LCD_P27
-  @{ */
-
-/* Symbols to be used with PORT driver */
-#define BOARD_LCD_P27_PORT PORTC               /*!<@brief PORT peripheral base pointer */
-#define BOARD_LCD_P27_PIN 7U                   /*!<@brief PORT pin number */
-#define BOARD_LCD_P27_PIN_MASK (1U << 7U)      /*!<@brief PORT pin mask */
-                                               /* @} */
-
-/*! @name PORTD0 (number 57), LCD-09_P40
-  @{ */
-
-/* Symbols to be used with PORT driver */
-#define BOARD_LCD_P40_PORT PORTD               /*!<@brief PORT peripheral base pointer */
-#define BOARD_LCD_P40_PIN 0U                   /*!<@brief PORT pin number */
-#define BOARD_LCD_P40_PIN_MASK (1U << 0U)      /*!<@brief PORT pin mask */
-                                               /* @} */
-
-/*! @name PORTD2 (number 59), J2[4]/D9/LCD_P42
-  @{ */
-
-/* Symbols to be used with PORT driver */
-#define BOARD_LCD_P42_PORT PORTD               /*!<@brief PORT peripheral base pointer */
-#define BOARD_LCD_P42_PIN 2U                   /*!<@brief PORT pin number */
-#define BOARD_LCD_P42_PIN_MASK (1U << 2U)      /*!<@brief PORT pin mask */
-                                               /* @} */
-
-/*! @name PORTD3 (number 60), J1[6]/D2/LCD_P43
-  @{ */
-
-/* Symbols to be used with PORT driver */
-#define BOARD_LCD_P43_PORT PORTD               /*!<@brief PORT peripheral base pointer */
-#define BOARD_LCD_P43_PIN 3U                   /*!<@brief PORT pin number */
-#define BOARD_LCD_P43_PIN_MASK (1U << 3U)      /*!<@brief PORT pin mask */
-                                               /* @} */
-
-/*! @name PORTD4 (number 61), J2[6]/D10/SPI1_PCS0/LCD_P44
-  @{ */
-
-/* Symbols to be used with PORT driver */
-#define BOARD_LCD_P44_PORT PORTD               /*!<@brief PORT peripheral base pointer */
-#define BOARD_LCD_P44_PIN 4U                   /*!<@brief PORT pin number */
-#define BOARD_LCD_P44_PIN_MASK (1U << 4U)      /*!<@brief PORT pin mask */
-                                               /* @} */
-
-/*! @name PORTE20 (number 9), J4[1]/DIFF_ADC0_DP/LCD_P59
-  @{ */
-
-/* Symbols to be used with PORT driver */
-#define BOARD_LCD_P59_PORT PORTE                /*!<@brief PORT peripheral base pointer */
-#define BOARD_LCD_P59_PIN 20U                   /*!<@brief PORT pin number */
-#define BOARD_LCD_P59_PIN_MASK (1U << 20U)      /*!<@brief PORT pin mask */
-                                                /* @} */
-
-/*! @name PORTE21 (number 10), J4[3]/DIFF_ADC0_DM/LCD_P60
-  @{ */
-
-/* Symbols to be used with PORT driver */
-#define BOARD_LCD_P60_PORT PORTE                /*!<@brief PORT peripheral base pointer */
-#define BOARD_LCD_P60_PIN 21U                   /*!<@brief PORT pin number */
-#define BOARD_LCD_P60_PIN_MASK (1U << 21U)      /*!<@brief PORT pin mask */
-                                                /* @} */
-
-/*!
- * @brief Configures pin routing and optionally pin electrical features.
- *
- */
-void BOARD_InitLCDPins(void);
-
 /*! @name PORTA4 (number 26), J1[10]/D4/SW1
   @{ */
 
@@ -351,6 +237,42 @@ void BOARD_InitACCEL_I2CPins(void);
  *
  */
 void BOARD_InitOSCPins(void);
+
+/*! @name PORTE22 (number 11), J4[5]/DIFF_ADC1_DP
+  @{ */
+
+/* Symbols to be used with PORT driver */
+#define BOARD_INITLIGHT_ADCPINS_LIGHT_SENSOR_PORT PORTE                /*!<@brief PORT peripheral base pointer */
+#define BOARD_INITLIGHT_ADCPINS_LIGHT_SENSOR_PIN 22U                   /*!<@brief PORT pin number */
+#define BOARD_INITLIGHT_ADCPINS_LIGHT_SENSOR_PIN_MASK (1U << 22U)      /*!<@brief PORT pin mask */
+                                                                       /* @} */
+
+/*!
+ * @brief Configures pin routing and optionally pin electrical features.
+ *
+ */
+void BOARD_InitLIGHT_ADCPins(void);
+
+/*!
+ * @brief Configures pin routing and optionally pin electrical features.
+ *
+ */
+void BOARD_Init_I2C1Pins(void);
+
+/*! @name PORTB0 (number 35), J4[2]/A0/LCD_P0
+  @{ */
+
+/* Symbols to be used with PORT driver */
+#define BOARD_INITADC_PINS_sensor_externo_PORT PORTB               /*!<@brief PORT peripheral base pointer */
+#define BOARD_INITADC_PINS_sensor_externo_PIN 0U                   /*!<@brief PORT pin number */
+#define BOARD_INITADC_PINS_sensor_externo_PIN_MASK (1U << 0U)      /*!<@brief PORT pin mask */
+                                                                   /* @} */
+
+/*!
+ * @brief Configures pin routing and optionally pin electrical features.
+ *
+ */
+void BOARD_InitADC_Pins(void);
 
 #if defined(__cplusplus)
 }

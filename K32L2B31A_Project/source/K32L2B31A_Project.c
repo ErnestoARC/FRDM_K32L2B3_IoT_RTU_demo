@@ -20,9 +20,27 @@
 #include "fsl_debug_console.h"
 #include <limits.h>
 #include <float.h>
+
+#include "iot_sdk_hal_i2c1.h"
+
+#include <iot_sdk_peripherals_leds.h>
+#include <iot_sdk_peripherals_light.h>
+#include "iot_sdk_peripherals_buttons.h"
+#include "iot_sdk_peripheral_temperature.h"
+#include "iot_sdk_peripherals_bme280.h"
+#include "iot_sdk_peripherals_sht3x.h"
+#include "iot_sdk_peripherals_sensor_ana.h"
+
+#include "iot_sdk_ irq_lptimer0.h"
+#include "iot_sdk_irq_lpuart0.h"
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
+#define HABILITAR_SENSOR_BME280		0
+#define HABILITAR_SENSOR_SHT3X		0
+
+#define HABILITAR_TLPTMR0			1
+#define HABILITAR_I2C1				1
 
 /*******************************************************************************
  * Private Prototypes
@@ -40,68 +58,145 @@
  * Private Source Code
  ******************************************************************************/
 int main(void) {
-    /* Init board hardware. */
+	/*Crea variables locales -------------------------------------*/
+	uint32_t adc_sensor_value;
+	uint32_t adc_light_value;
+	float temperature_value;
+	status_t status;
+	uint8_t nuevo_byte_uart;
+
+
+
+#if HABILITAR_SENSOR_BME280
+	bme280_data_t bme280_datos;
+	uint8_t bme280_detectado=0;
+	uint8_t bme280_base_de_tiempo=0;
+#endif
+
+#if HABILITAR_SENSOR_SHT3X
+	sht3x_data_t sht3x_datos;
+	uint8_t sht3x_detectado=0;
+	uint8_t sht3x_base_de_tiempo=0;
+#endif
+	/* Finaliza la creación de variables locales-----------------*/
+
+
+    /* Inicialización del microcontrolador ----------------------*/
     BOARD_InitBootPins();
     BOARD_InitBootClocks();
     BOARD_InitBootPeripherals();
+    /* Finaliza inicialización ----------------------------------*/
+
+
 #ifndef BOARD_INIT_DEBUG_CONSOLE_PERIPHERAL
-    /* Init FSL debug console. */
+    /* Inicializa el puerto serial para enviar mensajes al MODEM/DOCKLIGHT*/
     BOARD_InitDebugConsole();
 #endif
 
-    printf("============================================================\r\n");
-	printf("Size of C data types:\r\n");
-	printf("Type               Bytes\r\n");
-	printf("--------------------------------\r\n");
-	printf("char                 %lu\r\n", sizeof(char));
-	printf("int8_t               %lu\r\n", sizeof(int8_t));
-	printf("unsigned char        %lu\r\n", sizeof(unsigned char));
-	printf("uint8_t              %lu\r\n", sizeof(uint8_t));
-	printf("short                %lu\r\n", sizeof(short));
-	printf("int16_t              %lu\r\n", sizeof(int16_t));
-	printf("uint16t              %lu\r\n", sizeof(uint16_t));
-	printf("int                  %lu\r\n", sizeof(int));
-	printf("unsigned             %lu\r\n", sizeof(unsigned));
-	printf("long                 %lu\r\n", sizeof(long));
-	printf("unsigned long        %lu\r\n", sizeof(unsigned long));
-	printf("int32_t              %lu\r\n", sizeof(int32_t));
-	printf("uint32_t             %lu\r\n", sizeof(uint32_t));
-	printf("long long            %lu\r\n", sizeof(long long));
-	printf("int64_t              %lu\r\n", sizeof(int64_t));
-	printf("unsigned long long   %lu\r\n", sizeof(unsigned long long));
-	printf("uint64_t             %lu\r\n", sizeof(uint64_t));
-	printf("float                %lu\r\n", sizeof(float));
-	printf("double               %lu\r\n", sizeof(double));
-	printf("long double          %lu\r\n", sizeof(long double));
-	printf("_Bool                %lu\r\n", sizeof(_Bool));
-	printf("============================================================\r\n");
-	printf("Ranges for integer data types in C\r\n");
-	printf("------------------------------------------------------------\r\n");
-	printf("int8_t    %20d  %20d\r\n", SCHAR_MIN, SCHAR_MAX);
-	printf("int16_t   %20d  %20d\r\n", SHRT_MIN, SHRT_MAX);
-	printf("int32_t   %20d  %20d\r\n", INT_MIN, INT_MAX);
-	printf("int64_t   %20lld  %20lld\r\n", LLONG_MIN, LLONG_MAX);
-	printf("uint8_t   %20d  %20d\r\n", 0, UCHAR_MAX);
-	printf("uint16_t  %20d  %20d\r\n", 0, USHRT_MAX);
-	printf("uint32_t  %20d  %20u\r\n", 0, UINT_MAX);
-	printf("uint64_t  %20d  %20llu\r\n", 0, ULLONG_MAX);
-	printf("\r\n");
-	printf("============================================================\r\n");
-	printf("Ranges for real number data types in C\r\n\r\n");
-	printf("------------------------------------------------------------\r\n");
-	printf("float        %14.7g  %14.7g\r\n", FLT_MIN, FLT_MAX);
-	printf("double       %14.7g  %14.7g\r\n", DBL_MIN, DBL_MAX);
-	printf("long double  %14.7Lg  %14.7Lg\r\n", LDBL_MIN, LDBL_MAX);
-	printf("\r\n");
+#if HABILITAR_TLPTMR0
+    /* Activa LPTMR0 para que iniciar contador y posterior IRQ cada 1 segundo*/
+    printf("Inicializa LPTMR0:");
+    LPTMR_StartTimer(LPTMR0);
+    printf("OK\r\n");
+#endif
 
-    /* Force the counter to be placed into memory. */
-    volatile static int i = 0 ;
-    /* Enter an infinite loop, just incrementing a counter. */
+#if HABILITAR_I2C1
+    /* Inicializa I2C1 para lectura de sensores SHT31 y BME280*/
+    //Solo avanza si es exitoso el proceso
+    printf("Inicializa I2C1:");
+    if(i2c1MasterInit(100000)!=kStatus_Success){	//100kbps
+    	printf("Error");
+    	return 0 ;
+    }
+    printf("OK\r\n");
+#endif
+
+#if HABILITAR_SENSOR_SHT3X
+    printf("Detectando SHT3X:");
+    //LLamado a funcion que identifica sensor SHT3X
+    if(sht3xInit()== kStatus_Success){
+    	sht3x_detectado=1;
+    	printf("OK\r\n");
+    }
+#endif
+
+#if HABILITAR_SENSOR_BME280
+    printf("Detectando BME280:");
+    //LLamado a funcion que identifica sensor BME280
+    if (bme280WhoAmI() == kStatus_Success){
+    	printf("OK\r\n");
+    	(void)bme280Init();	//inicializa sensor bme280
+    	bme280_detectado=1;	//activa bandera que indica (SI HAY BME280)
+    }
+#endif
+
     while(1) {
-        i++ ;
-        /* 'Dummy' NOP to allow source level single stepping of
-            tight while() loop */
-        __asm volatile ("nop");
+    	if(lptmr0_ticks!=0){
+    		lptmr0_ticks=0;
+        	toggleLedRojo();
+        	toggleLedVerde();
+
+    		//Busca si llegaron nuevos datos desde modem mientras esperaba
+    		if (lpUart0CuantosDatosHayEnBuffer() > 0) {
+    			status = lpUart0LeerByteDesdeBuffer(&nuevo_byte_uart);
+    			if (status == kStatus_Success) {
+    				/* Imprime byte recibido por puerto LPUART0*/
+    				printf("Nuevo byte:%c - 0x%2x\r\n",nuevo_byte_uart,nuevo_byte_uart);
+
+    				/* Toma lectura del sensor de luz*/
+    				adc_light_value=getLightADC();
+    				printf("ADC Light: %d\r\n", adc_light_value);
+
+    				/* Toma lectura de temperatura*/
+    				temperature_value=getTemperatureValue();
+    				printf("Temperature: %f\r\n", temperature_value);
+
+    				/* Toma lectura de sensor análogico externo*/
+    				adc_sensor_value=getSensorADC();
+    				printf("ADC sensor: %d\r\n", adc_sensor_value);
+
+
+#if HABILITAR_SENSOR_BME280
+					if(bme280_detectado==1){
+						bme280_base_de_tiempo++;	//incrementa base de tiempo para tomar dato bme280
+						if(bme280_base_de_tiempo>10){	//	>10 equivale aproximadamente a 2s
+							bme280_base_de_tiempo=0; //reinicia contador de tiempo
+							if(bme280ReadData(&bme280_datos)==kStatus_Success){	//toma lectura humedad, presion, temperatura
+								printf("BME280 ->");
+								printf("temperatura:0x%X ",bme280_datos.temperatura);	//imprime temperatura sin procesar
+								printf("humedad:0x%X ",bme280_datos.humedad);	//imprime humedad sin procesar
+								printf("presion:0x%X ",bme280_datos.presion);	//imprime presion sin procesar
+								printf("\r\n");	//Imprime cambio de linea
+							}
+						}
+					}
+#endif
+
+#if HABILITAR_SENSOR_SHT3X
+					if(sht3x_detectado==1){
+						sht3x_base_de_tiempo++; //incrementa base de tiempo para tomar dato sensor SHT3X
+						if(sht3x_base_de_tiempo>10){//	>10 equivale aproximadamente a 2s
+							sht3x_base_de_tiempo=0; //reinicia contador de tiempo
+							if (sht3xReadData(&sht3x_datos) == kStatus_Success) {//toma lectura humedad, temperatura
+								printf("SHT3X ->");
+								printf("temperatura:0x%X ",sht3x_datos.temperatura);	//imprime temperatura sin procesar
+								printf("CRC8_t:0x%X ",sht3x_datos.crc_temperatura);	//imprime CRC8 de temperatura
+								printf("humedad:0x%X ",sht3x_datos.humedad);	//imprime humedad sin procesar
+								printf("CRC8_h:0x%X ",sht3x_datos.crc_humedad);	//imprime CRC8 de temperatura
+								printf("\r\n");	//Imprime cambio de linea
+							}
+						}
+					}
+#endif
+
+    	            printf("boton1:%d\r\n",leerBoton1());
+    	            printf("boton2:%d\r\n",leerBoton2());
+    	            printf("\r\n");
+    			}
+    		}
+
+
+    	}
     }
     return 0 ;
 }

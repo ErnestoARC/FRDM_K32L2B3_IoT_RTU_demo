@@ -60,7 +60,9 @@ instance:
 - peripheral: 'NVIC'
 - config_sets:
   - nvic:
-    - interrupt_table: []
+    - interrupt_table:
+      - 0: []
+      - 1: []
     - interrupts: []
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
 /* clang-format on */
@@ -70,11 +72,247 @@ static void NVIC_init(void) {
 } */
 
 /***********************************************************************************************************************
+ * LPTMR0 initialization code
+ **********************************************************************************************************************/
+/* clang-format off */
+/* TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
+instance:
+- name: 'LPTMR0'
+- type: 'lptmr'
+- mode: 'LPTMR_GENERAL'
+- custom_name_enabled: 'false'
+- type_id: 'lptmr_48552e76e8733b28a9c768b6d8d4fefa'
+- functional_group: 'BOARD_InitPeripherals'
+- peripheral: 'LPTMR0'
+- config_sets:
+  - fsl_lptmr:
+    - lptmr_config:
+      - timerMode: 'kLPTMR_TimerModeTimeCounter'
+      - pinSelect: 'ALT.0'
+      - pinPolarity: 'kLPTMR_PinPolarityActiveHigh'
+      - enableFreeRunning: 'false'
+      - bypassPrescaler: 'true'
+      - prescalerClockSource: 'kLPTMR_PrescalerClock_1'
+      - clockSource: 'BOARD_BootClockRUN'
+      - value: 'kLPTMR_Prescale_Glitch_0'
+      - timerPeriod: '100ms'
+    - enableInterrupt: 'true'
+    - interrupt:
+      - IRQn: 'LPTMR0_IRQn'
+      - enable_interrrupt: 'enabled'
+      - enable_priority: 'false'
+      - priority: '0'
+      - enable_custom_name: 'false'
+ * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
+/* clang-format on */
+const lptmr_config_t LPTMR0_config = {
+  .timerMode = kLPTMR_TimerModeTimeCounter,
+  .pinSelect = kLPTMR_PinSelectInput_0,
+  .pinPolarity = kLPTMR_PinPolarityActiveHigh,
+  .enableFreeRunning = false,
+  .bypassPrescaler = true,
+  .prescalerClockSource = kLPTMR_PrescalerClock_1,
+  .value = kLPTMR_Prescale_Glitch_0
+};
+
+static void LPTMR0_init(void) {
+  /* Initialize the LPTMR */
+  LPTMR_Init(LPTMR0_PERIPHERAL, &LPTMR0_config);
+  /* Set LPTMR period */
+  LPTMR_SetTimerPeriod(LPTMR0_PERIPHERAL, LPTMR0_TICKS);
+  /* Configure timer interrupt */
+  LPTMR_EnableInterrupts(LPTMR0_PERIPHERAL, kLPTMR_TimerInterruptEnable);
+  /* Enable interrupt LPTMR0_IRQn request in the NVIC. */
+  EnableIRQ(LPTMR0_IRQN);
+}
+
+/***********************************************************************************************************************
+ * ADC0 initialization code
+ **********************************************************************************************************************/
+/* clang-format off */
+/* TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
+instance:
+- name: 'ADC0'
+- type: 'adc16'
+- mode: 'ADC'
+- custom_name_enabled: 'false'
+- type_id: 'adc16_897558f9b7366ed198de18c33097d7d2'
+- functional_group: 'BOARD_InitPeripherals'
+- peripheral: 'ADC0'
+- config_sets:
+  - fsl_adc16:
+    - adc16_config:
+      - referenceVoltageSource: 'kADC16_ReferenceVoltageSourceValt'
+      - clockSource: 'kADC16_ClockSourceAsynchronousClock'
+      - enableAsynchronousClock: 'true'
+      - clockDivider: 'kADC16_ClockDivider8'
+      - resolution: 'kADC16_ResolutionSE12Bit'
+      - longSampleMode: 'kADC16_LongSampleDisabled'
+      - hardwareAverageMode: 'kADC16_HardwareAverageDisabled'
+      - enableHighSpeed: 'false'
+      - enableLowPower: 'false'
+      - enableContinuousConversion: 'false'
+    - adc16_channel_mux_mode: 'kADC16_ChannelMuxA'
+    - adc16_hardware_compare_config:
+      - hardwareCompareModeEnable: 'false'
+    - doAutoCalibration: 'true'
+    - trigger: 'false'
+    - enable_dma: 'false'
+    - enable_irq: 'false'
+    - adc_interrupt:
+      - IRQn: 'ADC0_IRQn'
+      - enable_interrrupt: 'enabled'
+      - enable_priority: 'false'
+      - priority: '0'
+      - enable_custom_name: 'false'
+    - adc16_channels_config:
+      - 0:
+        - channelName: 'LIGHT'
+        - enableDifferentialConversion: 'false'
+        - channelNumber: 'SE.3'
+        - enableInterruptOnConversionCompleted: 'false'
+        - channelGroup: '0'
+        - initializeChannel: 'false'
+      - 1:
+        - channelName: 'BANDGAP'
+        - enableDifferentialConversion: 'false'
+        - channelNumber: 'SE.27'
+        - enableInterruptOnConversionCompleted: 'false'
+        - channelGroup: '0'
+        - initializeChannel: 'false'
+      - 2:
+        - channelName: 'TEMPERATURE'
+        - enableDifferentialConversion: 'false'
+        - channelNumber: 'SE.26'
+        - enableInterruptOnConversionCompleted: 'false'
+        - channelGroup: '0'
+        - initializeChannel: 'false'
+      - 3:
+        - channelName: 'SENSOR_EXTERNO'
+        - enableDifferentialConversion: 'false'
+        - channelNumber: 'SE.8'
+        - enableInterruptOnConversionCompleted: 'false'
+        - channelGroup: '0'
+        - initializeChannel: 'true'
+ * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
+/* clang-format on */
+adc16_channel_config_t ADC0_channelsConfig[4] = {
+  {
+    .channelNumber = 3U,
+    .enableDifferentialConversion = false,
+    .enableInterruptOnConversionCompleted = false,
+  },
+  {
+    .channelNumber = 27U,
+    .enableDifferentialConversion = false,
+    .enableInterruptOnConversionCompleted = false,
+  },
+  {
+    .channelNumber = 26U,
+    .enableDifferentialConversion = false,
+    .enableInterruptOnConversionCompleted = false,
+  },
+  {
+    .channelNumber = 8U,
+    .enableDifferentialConversion = false,
+    .enableInterruptOnConversionCompleted = false,
+  }
+};
+const adc16_config_t ADC0_config = {
+  .referenceVoltageSource = kADC16_ReferenceVoltageSourceValt,
+  .clockSource = kADC16_ClockSourceAsynchronousClock,
+  .enableAsynchronousClock = true,
+  .clockDivider = kADC16_ClockDivider8,
+  .resolution = kADC16_ResolutionSE12Bit,
+  .longSampleMode = kADC16_LongSampleDisabled,
+  .hardwareAverageMode = kADC16_HardwareAverageDisabled,
+  .enableHighSpeed = false,
+  .enableLowPower = false,
+  .enableContinuousConversion = false
+};
+const adc16_channel_mux_mode_t ADC0_muxMode = kADC16_ChannelMuxA;
+
+static void ADC0_init(void) {
+  /* Initialize ADC16 converter */
+  ADC16_Init(ADC0_PERIPHERAL, &ADC0_config);
+  /* Make sure, that software trigger is used */
+  ADC16_EnableHardwareTrigger(ADC0_PERIPHERAL, false);
+  /* Configure channel multiplexing mode */
+  ADC16_SetChannelMuxMode(ADC0_PERIPHERAL, ADC0_muxMode);
+  /* Perform auto calibration */
+  ADC16_DoAutoCalibration(ADC0_PERIPHERAL);
+  /* Initialize channel */
+  ADC16_SetChannelConfig(ADC0_PERIPHERAL, ADC0_CH3_CONTROL_GROUP, &ADC0_channelsConfig[3]);
+}
+
+/***********************************************************************************************************************
+ * LPUART0 initialization code
+ **********************************************************************************************************************/
+/* clang-format off */
+/* TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
+instance:
+- name: 'LPUART0'
+- type: 'lpuart'
+- mode: 'interrupts'
+- custom_name_enabled: 'false'
+- type_id: 'lpuart_bf01db7d964092f3cf860852cba17f7e'
+- functional_group: 'BOARD_InitPeripherals'
+- peripheral: 'LPUART0'
+- config_sets:
+  - lpuartConfig_t:
+    - lpuartConfig:
+      - clockSource: 'LpuartClock'
+      - lpuartSrcClkFreq: 'BOARD_BootClockRUN'
+      - baudRate_Bps: '115200'
+      - parityMode: 'kLPUART_ParityDisabled'
+      - dataBitsCount: 'kLPUART_EightDataBits'
+      - isMsb: 'false'
+      - stopBitCount: 'kLPUART_OneStopBit'
+      - rxIdleType: 'kLPUART_IdleTypeStartBit'
+      - rxIdleConfig: 'kLPUART_IdleCharacter1'
+      - enableTx: 'true'
+      - enableRx: 'true'
+    - quick_selection: 'QuickSelection1'
+  - interruptsCfg:
+    - interrupts: 'kLPUART_RxDataRegFullInterruptEnable kLPUART_RxOverrunInterruptEnable'
+    - interrupt_vectors:
+      - enable_rx_tx_irq: 'true'
+      - interrupt_rx_tx:
+        - IRQn: 'LPUART0_IRQn'
+        - enable_interrrupt: 'enabled'
+        - enable_priority: 'false'
+        - priority: '0'
+        - enable_custom_name: 'false'
+ * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
+/* clang-format on */
+const lpuart_config_t LPUART0_config = {
+  .baudRate_Bps = 115200UL,
+  .parityMode = kLPUART_ParityDisabled,
+  .dataBitsCount = kLPUART_EightDataBits,
+  .isMsb = false,
+  .stopBitCount = kLPUART_OneStopBit,
+  .rxIdleType = kLPUART_IdleTypeStartBit,
+  .rxIdleConfig = kLPUART_IdleCharacter1,
+  .enableTx = true,
+  .enableRx = true
+};
+
+static void LPUART0_init(void) {
+  LPUART_Init(LPUART0_PERIPHERAL, &LPUART0_config, LPUART0_CLOCK_SOURCE);
+  LPUART_EnableInterrupts(LPUART0_PERIPHERAL, kLPUART_RxDataRegFullInterruptEnable | kLPUART_RxOverrunInterruptEnable);
+  /* Enable interrupt LPUART0_IRQn request in the NVIC. */
+  EnableIRQ(LPUART0_SERIAL_RX_TX_IRQN);
+}
+
+/***********************************************************************************************************************
  * Initialization functions
  **********************************************************************************************************************/
 void BOARD_InitPeripherals(void)
 {
   /* Initialize components */
+  LPTMR0_init();
+  ADC0_init();
+  LPUART0_init();
 }
 
 /***********************************************************************************************************************
