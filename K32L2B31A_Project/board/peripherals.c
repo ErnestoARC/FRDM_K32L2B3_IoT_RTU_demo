@@ -142,12 +142,12 @@ instance:
 - config_sets:
   - fsl_adc16:
     - adc16_config:
-      - referenceVoltageSource: 'kADC16_ReferenceVoltageSourceVref'
+      - referenceVoltageSource: 'kADC16_ReferenceVoltageSourceValt'
       - clockSource: 'kADC16_ClockSourceAsynchronousClock'
       - enableAsynchronousClock: 'true'
       - clockDivider: 'kADC16_ClockDivider8'
       - resolution: 'kADC16_ResolutionSE12Bit'
-      - longSampleMode: 'kADC16_LongSampleCycle24'
+      - longSampleMode: 'kADC16_LongSampleDisabled'
       - hardwareAverageMode: 'kADC16_HardwareAverageDisabled'
       - enableHighSpeed: 'false'
       - enableLowPower: 'false'
@@ -219,12 +219,12 @@ adc16_channel_config_t ADC0_channelsConfig[4] = {
   }
 };
 const adc16_config_t ADC0_config = {
-  .referenceVoltageSource = kADC16_ReferenceVoltageSourceVref,
+  .referenceVoltageSource = kADC16_ReferenceVoltageSourceValt,
   .clockSource = kADC16_ClockSourceAsynchronousClock,
   .enableAsynchronousClock = true,
   .clockDivider = kADC16_ClockDivider8,
   .resolution = kADC16_ResolutionSE12Bit,
-  .longSampleMode = kADC16_LongSampleCycle24,
+  .longSampleMode = kADC16_LongSampleDisabled,
   .hardwareAverageMode = kADC16_HardwareAverageDisabled,
   .enableHighSpeed = false,
   .enableLowPower = false,
