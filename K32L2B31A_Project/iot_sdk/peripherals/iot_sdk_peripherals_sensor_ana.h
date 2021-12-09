@@ -18,13 +18,13 @@
  * @{
  */
 /*!
- * @addtogroup LIGHT
+ * @addtogroup SENSOR_ANA
  * @{
  */
 /*******************************************************************************
  * Public Definitions
  ******************************************************************************/
-#define INDEX_SENSOR_ANA	3
+#define INDEX_SENSOR_ANA	3	//PTB0 ADC0_SE8
 /*******************************************************************************
  * External vars
  ******************************************************************************/
@@ -38,7 +38,7 @@
  ******************************************************************************/
 uint32_t getSensorADC(void);
 
-/** @} */ // end of SENSOR_ADC group
+/** @} */ // end of SENSOR_ANA group
 /** @} */ // end of PERIPHERALS group
 
 #endif /* PERIPHERALS_IOT_SDK_PERIPHERALS_SENSOR_ANA_H_ */
