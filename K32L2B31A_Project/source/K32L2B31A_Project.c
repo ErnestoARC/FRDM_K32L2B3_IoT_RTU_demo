@@ -30,6 +30,7 @@
 #include "iot_sdk_peripherals_bme280.h"
 #include "iot_sdk_peripherals_sht3x.h"
 #include "iot_sdk_peripherals_sensor_ana.h"
+#include "iot_sdk_peripherals_ec25au.h"
 
 #include "iot_sdk_ irq_lptimer0.h"
 #include "iot_sdk_irq_lpuart0.h"
@@ -53,7 +54,7 @@
 /*******************************************************************************
  * Local vars
  ******************************************************************************/
-
+char mensaje_text[]="mqtt_topi:temperatura";
 /*******************************************************************************
  * Private Source Code
  ******************************************************************************/
@@ -64,8 +65,6 @@ int main(void) {
 	float temperature_value;
 	status_t status;
 	uint8_t nuevo_byte_uart;
-
-
 
 #if HABILITAR_SENSOR_BME280
 	bme280_data_t bme280_datos;
@@ -80,13 +79,11 @@ int main(void) {
 #endif
 	/* Finaliza la creación de variables locales-----------------*/
 
-
     /* Inicialización del microcontrolador ----------------------*/
     BOARD_InitBootPins();
     BOARD_InitBootClocks();
     BOARD_InitBootPeripherals();
     /* Finaliza inicialización ----------------------------------*/
-
 
 #ifndef BOARD_INIT_DEBUG_CONSOLE_PERIPHERAL
     /* Inicializa el puerto serial para enviar mensajes al MODEM/DOCKLIGHT*/
@@ -130,11 +127,17 @@ int main(void) {
     }
 #endif
 
+    /* Activa LPTMR0 para que iniciar contador y posterior IRQ cada 1 segundo*/
+    printf("Inicializa Modem EC25\r\n");
+    ec25Inicializacion();
+
     while(1) {
-    	if(lptmr0_ticks!=0){
+    	if(lptmr0_ticks>100){
     		lptmr0_ticks=0;
         	toggleLedRojo();
         	toggleLedVerde();
+
+        	ec25Polling();	//Actualiza FSM de modem EC25
 
     		//Busca si llegaron nuevos datos desde modem mientras esperaba
     		if (lpUart0CuantosDatosHayEnBuffer() > 0) {
@@ -159,7 +162,7 @@ int main(void) {
 #if HABILITAR_SENSOR_BME280
 					if(bme280_detectado==1){
 						bme280_base_de_tiempo++;	//incrementa base de tiempo para tomar dato bme280
-						if(bme280_base_de_tiempo>10){	//	>10 equivale aproximadamente a 2s
+						if(bme280_base_de_tiempo>0){	//	>10 equivale aproximadamente a 2s
 							bme280_base_de_tiempo=0; //reinicia contador de tiempo
 							if(bme280ReadData(&bme280_datos)==kStatus_Success){	//toma lectura humedad, presion, temperatura
 								printf("BME280 ->");
@@ -192,6 +195,13 @@ int main(void) {
     	            printf("boton1:%d\r\n",leerBoton1());
     	            printf("boton2:%d\r\n",leerBoton2());
     	            printf("\r\n");
+
+
+    	            switch(nuevo_byte_uart){
+    	            	case 'm':
+    	            		ec25EnviarMensajeDeTexto((uint8_t*)(&mensaje_text[0]),(uint8_t)(strlen(&mensaje_text[0])));
+    	            		break;
+    	            }
     			}
     		}
 

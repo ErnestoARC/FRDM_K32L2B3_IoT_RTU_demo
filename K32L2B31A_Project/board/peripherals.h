@@ -31,9 +31,9 @@ extern "C" {
 /* Definition of the prescaled clock source frequency */
 #define LPTMR0_INPUT_FREQ 1000UL
 /* Definition of the timer period in us */
-#define LPTMR0_USEC_COUNT 100000UL
+#define LPTMR0_USEC_COUNT 1000UL
 /* Definition of the timer period in number of ticks */
-#define LPTMR0_TICKS 100UL
+#define LPTMR0_TICKS 1UL
 /* LPTMR0 interrupt vector ID (number). */
 #define LPTMR0_IRQN LPTMR0_IRQn
 /* LPTMR0 interrupt handler identifier. */

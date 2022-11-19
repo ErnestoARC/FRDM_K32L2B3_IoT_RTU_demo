@@ -25,7 +25,7 @@ enum _ec25_lista_ordendes{
 };
 
 #define EC25_BYTES_EN_BUFFER	100
-#define EC25_TIEMPO_MAXIMO_ESPERA	1
+#define EC25_TIEMPO_MAXIMO_ESPERA	5
 /*******************************************************************************
  * Private Prototypes
  ******************************************************************************/
@@ -201,6 +201,8 @@ uint8_t ec25Polling(void){
 		break;
 
 	case kFSM_RESULTADO_ERROR:
+		printf("EC25 ERROR\r\n");
+		ec25Inicializacion();
 		break;
 
 	case kFSM_RESULTADO_EXITOSO:
@@ -228,8 +230,7 @@ uint8_t ec25Polling(void){
 			switch(ec25_fsm.anterior){
 			case kFSM_ENVIANDO_AT:
 				//Busca palabra EC25 en buffer rx de quectel
-				puntero_ok = (uint8_t*) (strstr((char*) (&ec25_buffer_rx[0]),
-						(char*) (ec25_repuestas_at[kAT])));
+				puntero_ok = (uint8_t*) (strstr((char*) (&ec25_buffer_rx[0]),(char*) (ec25_repuestas_at[kAT])));
 
 				if(puntero_ok!=0x00){
 					//Si la respuesta es encontrada, se avanza al siguiente estado

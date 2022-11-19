@@ -687,7 +687,7 @@
                            <setting name="prescalerClockSource" value="kLPTMR_PrescalerClock_1"/>
                            <setting name="clockSource" value="BOARD_BootClockRUN"/>
                            <setting name="value" value="kLPTMR_Prescale_Glitch_0"/>
-                           <setting name="timerPeriod" value="100ms"/>
+                           <setting name="timerPeriod" value="1ms"/>
                         </struct>
                         <setting name="enableInterrupt" value="true"/>
                         <struct name="interrupt">
